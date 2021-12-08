@@ -4,6 +4,6 @@ import br.com.challenge.githubchallenge.data.api.ApiHelper
 
 class MainRepository(private val apiHelper: ApiHelper) {
 
-    suspend fun getRepositories(page:Int) = apiHelper.getRepositories(page)
+    suspend fun getRepositories(language:String, page:Int) = apiHelper.getRepositories(language, page)
 
 }

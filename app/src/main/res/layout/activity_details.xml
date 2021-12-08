@@ -12,6 +12,15 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/default_22dp">
 
+        <include
+            android:id="@+id/activity_details_toolbar"
+            layout="@layout/custom_toolbar"
+            android:layout_width="0dp"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
         <TextView
             android:id="@+id/ownerTitleTextView"
             android:layout_width="wrap_content"
@@ -23,7 +32,7 @@
             android:text="@string/owner"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/activity_details_toolbar" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ownerImageView"

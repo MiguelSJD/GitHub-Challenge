@@ -2,7 +2,16 @@
     <string name="app_name">GitHub Challenge</string>
     <string name="owner">Owner</string>
     <string name="repository">Repository</string>
-    <string name="name">Name</string>
+    <string name="name">Name:</string>
     <string name="stars">Stars:</string>
     <string name="forks">Forks:</string>
+    <string name="title_repository">Repository</string>
+    <string name="title_kotlin_repositories">KOTLIN REPOSITORIES</string>
+    <string name="title_java_repositories">JAVA REPOSITORIES</string>
+    <string name="title_php_repositories">PHP REPOSITORIES</string>
+    <string name="title_c_repositories">C REPOSITORIES</string>
+    <string name="title_cplusplus_repositories">C++ REPOSITORIES</string>
+    <string name="label_choose_the_language">Choose the language</string>
+    <string name="label_cancel">Cancel</string>
+    <string name="label_confirm">Confirm</string>
 </resources>
