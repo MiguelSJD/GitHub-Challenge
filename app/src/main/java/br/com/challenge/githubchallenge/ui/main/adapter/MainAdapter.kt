@@ -65,6 +65,13 @@ class MainAdapter(
         }
     }
 
+    fun updateRepositories(repositories:List<Item>){
+        this.items.apply {
+            clear()
+            addAll(repositories)
+        }
+    }
+
     interface OnRepositoryClickListener {
         fun onRepositoryClicked(item: Item)
     }

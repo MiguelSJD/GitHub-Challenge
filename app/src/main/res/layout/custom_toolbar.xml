@@ -35,6 +35,17 @@
             android:textStyle="bold"
             tools:text="Title Toolbar" />
 
+        <ImageButton
+            android:id="@+id/toolbar_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/transparent"
+            android:paddingStart="@dimen/default_16dp"
+            android:paddingEnd="@dimen/default_16dp"
+            android:src="@drawable/ic_filter"
+            android:layout_gravity="end"
+            android:visibility="gone" />
+
     </com.google.android.material.appbar.MaterialToolbar>
 
 

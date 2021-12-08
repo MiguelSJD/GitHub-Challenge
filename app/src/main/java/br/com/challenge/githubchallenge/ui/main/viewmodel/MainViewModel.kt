@@ -9,10 +9,10 @@ import java.lang.Exception
 
 class MainViewModel (private val mainRepository: MainRepository): ViewModel() {
 
-    fun getRepositories(page:Int) = liveData(Dispatchers.IO) {
+    fun getRepositories(language:String, page:Int) = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
         try {
-            emit(Resource.success(data = mainRepository.getRepositories(page)))
+            emit(Resource.success(data = mainRepository.getRepositories(language, page)))
         } catch (exception: Exception){
             emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
         }
