@@ -1,5 +1,6 @@
 package br.com.challenge.githubchallenge.ui.main.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
@@ -14,13 +15,12 @@ import br.com.challenge.githubchallenge.data.api.ApiHelper
 import br.com.challenge.githubchallenge.data.api.RetrofitBuilder
 import br.com.challenge.githubchallenge.data.model.Item
 import br.com.challenge.githubchallenge.ui.base.ViewModelFactory
+import br.com.challenge.githubchallenge.ui.details.view.DetailsActivity
 import br.com.challenge.githubchallenge.ui.main.adapter.MainAdapter
 import br.com.challenge.githubchallenge.ui.main.viewmodel.MainViewModel
-import br.com.challenge.githubchallenge.utils.Status.SUCCESS
-import br.com.challenge.githubchallenge.utils.Status.ERROR
-import br.com.challenge.githubchallenge.utils.Status.LOADING
+import br.com.challenge.githubchallenge.utils.Status.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MainAdapter.OnRepositoryClickListener {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var adapter: MainAdapter
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupUI() {
         recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = MainAdapter(arrayListOf())
+        adapter = MainAdapter(arrayListOf(), this)
         recyclerView.addItemDecoration(
             DividerItemDecoration(
                 recyclerView.context,
@@ -94,5 +94,11 @@ class MainActivity : AppCompatActivity() {
             addRepositories(item)
             notifyDataSetChanged()
         }
+    }
+
+    override fun onRepositoryClicked(item: Item) {
+        val intent = Intent(this, DetailsActivity::class.java)
+        intent.putExtra("item", item)
+        startActivity(intent)
     }
 }

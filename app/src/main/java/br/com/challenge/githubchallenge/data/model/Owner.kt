@@ -1,6 +1,7 @@
 package br.com.challenge.githubchallenge.data.model
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class Owner(
     @SerializedName("avatar_url")
@@ -9,4 +10,4 @@ data class Owner(
     val id: Int,
     @SerializedName("login")
     val login: String,
-)
+):Serializable

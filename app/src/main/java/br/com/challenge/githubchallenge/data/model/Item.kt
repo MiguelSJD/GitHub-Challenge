@@ -1,6 +1,7 @@
 package br.com.challenge.githubchallenge.data.model
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class Item(
     @SerializedName("forks")
@@ -15,4 +16,5 @@ data class Item(
     val stargazersCount: Int,
     @SerializedName("updated_at")
     val updatedAt:String
-)
+):Serializable
+
