@@ -6,5 +6,5 @@ class ApiHelper (private val apiService: ApiService) {
         private const val SORT = "stars"
     }
 
-    suspend fun getRepositories(language:String, page:Int) = apiService.getRepositories(language, SORT, page.toString())
+    suspend fun getRepositories(language:String, page:Int) = apiService.getRepositories(("language:$language"), SORT, page.toString())
 }

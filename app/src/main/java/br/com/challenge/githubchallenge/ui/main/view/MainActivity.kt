@@ -32,7 +32,8 @@ class MainActivity : AppCompatActivity(), MainAdapter.OnRepositoryClickListener 
     private val toolbarTitle by lazy { findViewById<com.google.android.material.textview.MaterialTextView>(R.id.toolbar_title) }
     private val toolbarFilter by lazy { findViewById<ImageButton>(R.id.toolbar_filter) }
 
-    var language = "language:kotlin"
+    private var isSameLanguage = true
+    var language = "kotlin"
         private set
     private var contPage = 0
 
@@ -45,11 +46,11 @@ class MainActivity : AppCompatActivity(), MainAdapter.OnRepositoryClickListener 
         setupToolbar()
     }
 
-    private fun setupToolbar(){
+    private fun setupToolbar() {
         toolbarTitle.text = getString(R.string.title_kotlin_repositories)
         toolbarFilter.visibility = View.VISIBLE
         toolbarFilter.setOnClickListener {
-            val singleItems = arrayOf("Kotlin", "Java", "PHP" ,"C", "C++")
+            val singleItems = arrayOf("Kotlin", "Java", "PHP", "C", "C++")
             val checkedItem = 0
 
             MaterialAlertDialogBuilder(this)
@@ -58,30 +59,31 @@ class MainActivity : AppCompatActivity(), MainAdapter.OnRepositoryClickListener 
                     dialog.dismiss()
                 }
                 .setPositiveButton(resources.getString(R.string.label_confirm)) { dialog, _ ->
-                    when((dialog as AlertDialog).listView.checkedItemPosition){
+                    isSameLanguage = false
+                    when ((dialog as AlertDialog).listView.checkedItemPosition) {
                         0 -> {
-                            language = "language:kotlin"
-                            updateObservers()
+                            language = "kotlin"
+                            setupObservers()
                             toolbarTitle.text = getString(R.string.title_kotlin_repositories)
                         }
                         1 -> {
-                            language = "language:java"
-                            updateObservers()
+                            language = "java"
+                            setupObservers()
                             toolbarTitle.text = getString(R.string.title_java_repositories)
                         }
                         2 -> {
-                            language = "language:php"
-                            updateObservers()
+                            language = "php"
+                            setupObservers()
                             toolbarTitle.text = getString(R.string.title_php_repositories)
                         }
                         3 -> {
-                            language = "language:c"
-                            updateObservers()
+                            language = "c"
+                            setupObservers()
                             toolbarTitle.text = getString(R.string.title_c_repositories)
                         }
                         4 -> {
-                            language = "language:c++"
-                            updateObservers()
+                            language = "c++"
+                            setupObservers()
                             toolbarTitle.text = getString(R.string.title_cplusplus_repositories)
                         }
                     }
@@ -122,7 +124,9 @@ class MainActivity : AppCompatActivity(), MainAdapter.OnRepositoryClickListener 
     }
 
     private fun setupObservers() {
-        contPage += 1
+        if (isSameLanguage) contPage += 1
+        else contPage = 1
+
         viewModel.getRepositories(language, contPage).observe(this, {
             it?.let { resource ->
                 when (resource.status) {
@@ -130,30 +134,7 @@ class MainActivity : AppCompatActivity(), MainAdapter.OnRepositoryClickListener 
                         recyclerView.visibility = View.VISIBLE
                         progressBar.visibility = View.GONE
                         resource.data?.let { item -> getList(item.items) }
-                    }
-                    ERROR -> {
-                        recyclerView.visibility = View.VISIBLE
-                        progressBar.visibility = View.GONE
-                        Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
-                    }
-                    LOADING -> {
-                        progressBar.visibility = View.VISIBLE
-                        recyclerView.visibility = View.VISIBLE
-                    }
-                }
-            }
-        })
-    }
 
-    private fun updateObservers() {
-        contPage = 1
-        viewModel.getRepositories(language, contPage).observe(this, {
-            it?.let { resource ->
-                when (resource.status) {
-                    SUCCESS -> {
-                        recyclerView.visibility = View.VISIBLE
-                        progressBar.visibility = View.GONE
-                        resource.data?.let { item -> updateList(item.items) }
                     }
                     ERROR -> {
                         recyclerView.visibility = View.VISIBLE
@@ -171,14 +152,11 @@ class MainActivity : AppCompatActivity(), MainAdapter.OnRepositoryClickListener 
 
     private fun getList(item: List<Item>) {
         adapter.apply {
-            addRepositories(item)
-            notifyDataSetChanged()
-        }
-    }
-
-    private fun updateList(item: List<Item>) {
-        adapter.apply {
-            updateRepositories(item)
+            if (isSameLanguage) addRepositories(item)
+            else {
+                updateRepositories(item)
+                isSameLanguage = true
+            }
             notifyDataSetChanged()
         }
     }
