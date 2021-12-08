@@ -2,6 +2,8 @@ package br.com.challenge.githubchallenge.ui.details.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import br.com.challenge.githubchallenge.R
@@ -13,11 +15,25 @@ import com.bumptech.glide.signature.ObjectKey
 
 class DetailsActivity : AppCompatActivity() {
 
+    private val toolbarTitle by lazy { findViewById<com.google.android.material.textview.MaterialTextView>(R.id.toolbar_title) }
+    private val toolbarArrowBack by lazy { findViewById<ImageButton>(R.id.toolbar_arrow_back) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
         val item = intent.getSerializableExtra("item") as? Item
+        setupToolbar(item)
         showDetails(item)
+    }
+
+    private fun setupToolbar(item: Item?){
+        if (item != null) {
+            toolbarTitle.text = item.name
+        } else toolbarTitle.text = getString(R.string.title_repository)
+        toolbarArrowBack.visibility = View.VISIBLE
+        toolbarArrowBack.setOnClickListener{
+            finish()
+        }
     }
 
     private fun showDetails(item: Item?) {

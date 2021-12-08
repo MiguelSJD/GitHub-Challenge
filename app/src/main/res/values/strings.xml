@@ -5,4 +5,6 @@
     <string name="name">Name</string>
     <string name="stars">Stars:</string>
     <string name="forks">Forks:</string>
+    <string name="title_repository">Repository</string>
+    <string name="title_kotlin_repositories">KOTLIN REPOSITORIES</string>
 </resources>

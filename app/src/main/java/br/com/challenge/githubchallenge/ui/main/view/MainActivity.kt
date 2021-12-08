@@ -26,15 +26,21 @@ class MainActivity : AppCompatActivity(), MainAdapter.OnRepositoryClickListener 
     private lateinit var adapter: MainAdapter
     private val recyclerView by lazy { findViewById<RecyclerView>(R.id.recyclerview) }
     private val progressBar by lazy { findViewById<ProgressBar>(R.id.progress_bar) }
+    private val toolbarTitle by lazy { findViewById<com.google.android.material.textview.MaterialTextView>(R.id.toolbar_title) }
 
     private var contPage = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setupToolbar()
         setupViewModel()
         setupUI()
         setupObservers()
+    }
+
+    private fun setupToolbar() {
+        toolbarTitle.text = getString(R.string.title_kotlin_repositories)
     }
 
     private fun setupViewModel() {
