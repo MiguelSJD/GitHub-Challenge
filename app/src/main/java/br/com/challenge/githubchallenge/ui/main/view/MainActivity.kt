@@ -8,13 +8,12 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.challenge.githubchallenge.R
-import br.com.challenge.githubchallenge.data.api.ApiHelper
-import br.com.challenge.githubchallenge.data.api.RetrofitBuilder
+import androidx.activity.viewModels
+import br.com.challenge.githubchallenge.App
 import br.com.challenge.githubchallenge.data.model.Item
 import br.com.challenge.githubchallenge.ui.base.ViewModelFactory
 import br.com.challenge.githubchallenge.ui.details.view.DetailsActivity
@@ -25,7 +24,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class MainActivity : AppCompatActivity(), MainAdapter.OnRepositoryClickListener {
 
-    private lateinit var viewModel: MainViewModel
+    private val mainViewModel: MainViewModel by viewModels{
+        ViewModelFactory((application as App).repository)
+    }
     private lateinit var adapter: MainAdapter
     private val recyclerView by lazy { findViewById<RecyclerView>(R.id.recyclerview) }
     private val progressBar by lazy { findViewById<ProgressBar>(R.id.progress_bar) }
@@ -33,14 +34,13 @@ class MainActivity : AppCompatActivity(), MainAdapter.OnRepositoryClickListener 
     private val toolbarFilter by lazy { findViewById<ImageButton>(R.id.toolbar_filter) }
 
     private var isSameLanguage = true
-    var language = "kotlin"
+    var language = "Kotlin"
         private set
     private var contPage = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setupViewModel()
         setupUI()
         setupObservers()
         setupToolbar()
@@ -59,30 +59,31 @@ class MainActivity : AppCompatActivity(), MainAdapter.OnRepositoryClickListener 
                     dialog.dismiss()
                 }
                 .setPositiveButton(resources.getString(R.string.label_confirm)) { dialog, _ ->
+                    contPage = 1
                     isSameLanguage = false
                     when ((dialog as AlertDialog).listView.checkedItemPosition) {
                         0 -> {
-                            language = "kotlin"
+                            language = "Kotlin"
                             setupObservers()
                             toolbarTitle.text = getString(R.string.title_kotlin_repositories)
                         }
                         1 -> {
-                            language = "java"
+                            language = "Java"
                             setupObservers()
                             toolbarTitle.text = getString(R.string.title_java_repositories)
                         }
                         2 -> {
-                            language = "php"
+                            language = "PHP"
                             setupObservers()
                             toolbarTitle.text = getString(R.string.title_php_repositories)
                         }
                         3 -> {
-                            language = "c"
+                            language = "C"
                             setupObservers()
                             toolbarTitle.text = getString(R.string.title_c_repositories)
                         }
                         4 -> {
-                            language = "c++"
+                            language = "C++"
                             setupObservers()
                             toolbarTitle.text = getString(R.string.title_cplusplus_repositories)
                         }
@@ -93,13 +94,6 @@ class MainActivity : AppCompatActivity(), MainAdapter.OnRepositoryClickListener 
                 }
                 .show()
         }
-    }
-
-    private fun setupViewModel() {
-        viewModel = ViewModelProvider(
-            this,
-            ViewModelFactory(ApiHelper(RetrofitBuilder.apiService))
-        ).get(MainViewModel::class.java)
     }
 
     private fun setupUI() {
@@ -125,29 +119,35 @@ class MainActivity : AppCompatActivity(), MainAdapter.OnRepositoryClickListener 
 
     private fun setupObservers() {
         if (isSameLanguage) contPage += 1
-        else contPage = 1
 
-        viewModel.getRepositories(language, contPage).observe(this, {
+        mainViewModel.getRepositories(language, contPage).observe(this, {
             it?.let { resource ->
                 when (resource.status) {
                     SUCCESS -> {
-                        recyclerView.visibility = View.VISIBLE
                         progressBar.visibility = View.GONE
                         resource.data?.let { item -> getList(item.items) }
-
                     }
                     ERROR -> {
-                        recyclerView.visibility = View.VISIBLE
                         progressBar.visibility = View.GONE
-                        Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "An error occurred while getting data from api, trying to get data from data base", Toast.LENGTH_SHORT).show()
+                        setupOfflineRepositories()
+                        isSameLanguage = false
                     }
                     LOADING -> {
                         progressBar.visibility = View.VISIBLE
-                        recyclerView.visibility = View.VISIBLE
                     }
                 }
             }
         })
+    }
+
+    private fun setupOfflineRepositories(){
+        mainViewModel.getOfflineRepositories(language).observe(this,{item ->
+            adapter.apply {
+                updateRepositories(item)
+                notifyDataSetChanged()
+            }
+        } )
     }
 
     private fun getList(item: List<Item>) {
@@ -159,6 +159,7 @@ class MainActivity : AppCompatActivity(), MainAdapter.OnRepositoryClickListener 
             }
             notifyDataSetChanged()
         }
+        mainViewModel.saveRepositories(item)
     }
 
     override fun onRepositoryClicked(item: Item) {
