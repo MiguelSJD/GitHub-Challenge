@@ -59,18 +59,14 @@ class MainAdapter(
 
     override fun getItemCount(): Int = items.size
 
-    fun addRepositories(repositories:List<Item>){
+    fun addRepositories(repositories:List<Item>, isAnotherLanguage:Boolean){
         this.items.apply {
+            if (isAnotherLanguage) clear()
             addAll(repositories)
         }
     }
 
-    fun updateRepositories(repositories:List<Item>){
-        this.items.apply {
-            clear()
-            addAll(repositories)
-        }
-    }
+    fun isEmpty():Boolean = items.isEmpty()
 
     interface OnRepositoryClickListener {
         fun onRepositoryClicked(item: Item)

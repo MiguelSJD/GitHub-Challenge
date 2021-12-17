@@ -129,9 +129,9 @@ class MainActivity : AppCompatActivity(), MainAdapter.OnRepositoryClickListener 
                     }
                     ERROR -> {
                         progressBar.visibility = View.GONE
-                        Toast.makeText(this, "An error occurred while getting data from api, trying to get data from data base", Toast.LENGTH_SHORT).show()
-                        setupOfflineRepositories()
+                        Toast.makeText(this, getString(R.string.message_fail_to_get_data_from_api), Toast.LENGTH_SHORT).show()
                         isSameLanguage = false
+                        setupOfflineRepositories()
                     }
                     LOADING -> {
                         progressBar.visibility = View.VISIBLE
@@ -142,24 +142,22 @@ class MainActivity : AppCompatActivity(), MainAdapter.OnRepositoryClickListener 
     }
 
     private fun setupOfflineRepositories(){
-        mainViewModel.getOfflineRepositories(language).observe(this,{item ->
+        mainViewModel.getOfflineRepositories(language).observe(this,{items ->
             adapter.apply {
-                updateRepositories(item)
+                addRepositories(items, !isSameLanguage)
                 notifyDataSetChanged()
             }
+            if (adapter.isEmpty()) Toast.makeText(this, getString(R.string.message_fail_to_recover_data_from_database), Toast.LENGTH_LONG).show()
         } )
     }
 
-    private fun getList(item: List<Item>) {
+    private fun getList(items: List<Item>) {
         adapter.apply {
-            if (isSameLanguage) addRepositories(item)
-            else {
-                updateRepositories(item)
-                isSameLanguage = true
-            }
+            addRepositories(items, !isSameLanguage)
             notifyDataSetChanged()
         }
-        mainViewModel.saveRepositories(item)
+        isSameLanguage = true
+        mainViewModel.saveRepositories(items)
     }
 
     override fun onRepositoryClicked(item: Item) {

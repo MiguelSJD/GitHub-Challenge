@@ -16,4 +16,6 @@
     <string name="label_confirm">Confirm</string>
     <string name="back_button_content_description">Back button</string>
     <string name="filter_button_content_description">Filter button</string>
+    <string name="message_fail_to_get_data_from_api">An error occurred while getting data from api, trying to get data from database.</string>
+    <string name="message_fail_to_recover_data_from_database">It was impossible to recover any data.</string>
 </resources>
