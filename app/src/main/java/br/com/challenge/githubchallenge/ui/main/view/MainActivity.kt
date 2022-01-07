@@ -13,13 +13,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.challenge.githubchallenge.R
 import androidx.activity.viewModels
+import androidx.lifecycle.Observer
 import br.com.challenge.githubchallenge.App
 import br.com.challenge.githubchallenge.data.model.Item
 import br.com.challenge.githubchallenge.ui.base.ViewModelFactory
 import br.com.challenge.githubchallenge.ui.details.view.DetailsActivity
 import br.com.challenge.githubchallenge.ui.main.adapter.MainAdapter
 import br.com.challenge.githubchallenge.ui.main.viewmodel.MainViewModel
-import br.com.challenge.githubchallenge.utils.Status.*
+import br.com.challenge.githubchallenge.ui.main.viewmodel.MainViewState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class MainActivity : AppCompatActivity(), MainAdapter.OnRepositoryClickListener {
@@ -41,8 +42,14 @@ class MainActivity : AppCompatActivity(), MainAdapter.OnRepositoryClickListener 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        mainViewModel.states.observe(this, { state ->
+            when (state) {
+                is MainViewState.ShowRepositories -> showRepositories(state.repositories)
+                is MainViewState.ShowOfflineRepositories -> showOfflineRepositories()
+            }
+        })
         setupUI()
-        setupObservers()
+        getRepositories()
         setupToolbar()
     }
 
@@ -64,27 +71,27 @@ class MainActivity : AppCompatActivity(), MainAdapter.OnRepositoryClickListener 
                     when ((dialog as AlertDialog).listView.checkedItemPosition) {
                         0 -> {
                             language = "Kotlin"
-                            setupObservers()
+                            getRepositories()
                             toolbarTitle.text = getString(R.string.title_kotlin_repositories)
                         }
                         1 -> {
                             language = "Java"
-                            setupObservers()
+                            getRepositories()
                             toolbarTitle.text = getString(R.string.title_java_repositories)
                         }
                         2 -> {
                             language = "PHP"
-                            setupObservers()
+                            getRepositories()
                             toolbarTitle.text = getString(R.string.title_php_repositories)
                         }
                         3 -> {
                             language = "C"
-                            setupObservers()
+                            getRepositories()
                             toolbarTitle.text = getString(R.string.title_c_repositories)
                         }
                         4 -> {
                             language = "C++"
-                            setupObservers()
+                            getRepositories()
                             toolbarTitle.text = getString(R.string.title_cplusplus_repositories)
                         }
                     }
@@ -111,34 +118,16 @@ class MainActivity : AppCompatActivity(), MainAdapter.OnRepositoryClickListener 
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    setupObservers()
+                    getRepositories()
                 }
             }
         })
     }
 
-    private fun setupObservers() {
+    private fun getRepositories() {
         if (isSameLanguage) contPage += 1
-
-        mainViewModel.getRepositories(language, contPage).observe(this, {
-            it?.let { resource ->
-                when (resource.status) {
-                    SUCCESS -> {
-                        progressBar.visibility = View.GONE
-                        resource.data?.let { item -> getList(item.items) }
-                    }
-                    ERROR -> {
-                        progressBar.visibility = View.GONE
-                        Toast.makeText(this, getString(R.string.message_fail_to_get_data_from_api), Toast.LENGTH_SHORT).show()
-                        isSameLanguage = false
-                        setupOfflineRepositories()
-                    }
-                    LOADING -> {
-                        progressBar.visibility = View.VISIBLE
-                    }
-                }
-            }
-        })
+        progressBar?.visibility = View.VISIBLE
+        mainViewModel.getRepositories(language,contPage)
     }
 
     private fun setupOfflineRepositories(){
@@ -151,7 +140,8 @@ class MainActivity : AppCompatActivity(), MainAdapter.OnRepositoryClickListener 
         } )
     }
 
-    private fun getList(items: List<Item>) {
+    private fun showRepositories(items: List<Item>) {
+        progressBar.visibility = View.GONE
         adapter.apply {
             addRepositories(items, !isSameLanguage)
             notifyDataSetChanged()
@@ -166,4 +156,10 @@ class MainActivity : AppCompatActivity(), MainAdapter.OnRepositoryClickListener 
         startActivity(intent)
     }
 
+    private fun showOfflineRepositories() {
+        Toast.makeText(this, getString(R.string.message_fail_to_get_data_from_api), Toast.LENGTH_SHORT).show()
+        isSameLanguage = false
+        progressBar.visibility = View.GONE
+        setupOfflineRepositories()
+    }
 }
