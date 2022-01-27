@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:background="@color/default_26282f"
+    android:fillViewport="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/default_22dp">
+
+        <include
+            android:id="@+id/activity_details_toolbar"
+            layout="@layout/custom_toolbar"
+            android:layout_width="0dp"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/ownerTitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_42dp"
+            android:textSize="@dimen/default_22sp"
+            android:textStyle="italic"
+            android:textColor="@color/default_FF6959"
+            android:text="@string/owner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activity_details_toolbar" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ownerImageView"
+            android:layout_width="@dimen/default_100dp"
+            android:layout_height="@dimen/default_100dp"
+            android:layout_marginTop="@dimen/default_12dp"
+            app:shapeAppearanceOverlay="@style/ImageView.Round"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ownerTitleTextView" />
+
+        <TextView
+            android:id="@+id/ownerNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_4dp"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@+id/ownerImageView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/repositoryTitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_52dp"
+            android:textSize="@dimen/default_22sp"
+            android:textStyle="italic"
+            android:textColor="@color/default_FF6959"
+            android:text="@string/repository"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ownerNameTextView" />
+
+        <TextView
+            android:id="@+id/nameLabelTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_22dp"
+            android:layout_marginTop="@dimen/default_12dp"
+            android:textStyle="bold"
+            android:textColor="@color/default_FF6959"
+            android:text="@string/name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/repositoryTitleTextView" />
+
+        <TextView
+            android:id="@+id/repositoryNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_4dp"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toEndOf="@+id/nameLabelTextView"
+            app:layout_constraintTop_toTopOf="@+id/nameLabelTextView" />
+
+        <TextView
+            android:id="@+id/starsLabelTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_8dp"
+            android:textStyle="bold"
+            android:textColor="@color/default_FF6959"
+            android:text="@string/stars"
+            app:layout_constraintStart_toStartOf="@+id/nameLabelTextView"
+            app:layout_constraintTop_toBottomOf="@+id/nameLabelTextView" />
+
+        <TextView
+            android:id="@+id/repositoryStarsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_4dp"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toEndOf="@+id/starsLabelTextView"
+            app:layout_constraintTop_toTopOf="@+id/starsLabelTextView" />
+
+        <TextView
+            android:id="@+id/forksLabelTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_8dp"
+            android:textStyle="bold"
+            android:textColor="@color/default_FF6959"
+            android:text="@string/forks"
+            app:layout_constraintStart_toStartOf="@+id/starsLabelTextView"
+            app:layout_constraintTop_toBottomOf="@+id/starsLabelTextView" />
+
+        <TextView
+            android:id="@+id/repositoryForksTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_4dp"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toEndOf="@+id/forksLabelTextView"
+            app:layout_constraintTop_toTopOf="@+id/forksLabelTextView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

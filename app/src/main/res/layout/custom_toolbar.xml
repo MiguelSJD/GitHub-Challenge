@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="?attr/colorPrimary"
+    android:elevation="@dimen/default_4dp"
+    android:orientation="horizontal">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:contentInsetStart="0dp">
+
+        <ImageButton
+            android:id="@+id/toolbar_arrow_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:layout_marginStart="@dimen/default_12dp"
+            android:layout_marginEnd="@dimen/default_8dp"
+            android:src="@drawable/ic_arrow_back"
+            android:contentDescription="@string/back_button_content_description"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:padding="@dimen/default_8dp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/default_22sp"
+            android:textStyle="bold"
+            tools:text="Title Toolbar" />
+
+        <ImageButton
+            android:id="@+id/toolbar_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:layout_marginEnd="@dimen/default_12dp"
+            android:src="@drawable/ic_filter"
+            android:layout_gravity="end"
+            android:visibility="gone"
+            android:contentDescription="@string/filter_button_content_description" />
+
+    </com.google.android.material.appbar.MaterialToolbar>
+
+
+</LinearLayout>
