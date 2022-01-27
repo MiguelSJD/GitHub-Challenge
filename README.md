@@ -2,10 +2,10 @@
 
 ![Completed](http://img.shields.io/static/v1?label=STATUS&message=COMPLETED&color=GREEN&style=for-the-badge)
 
-## Descrição do Projeto
+## Project Description
 <p>App to get GitHub repositories from an api and save locally.</p>
 
-### Tecnologias
+### Technologies
 
 - ``MVVM``
 - ``Glide``
